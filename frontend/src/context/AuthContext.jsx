@@ -27,7 +27,8 @@ export const AuthProvider = ({ children }) => {
 
     const login = async (email, password) => {
         try {
-            const res = await axios.post('http://localhost:3000/api/v1/auth/login', { email, password });
+            const apiBase = import.meta.env.VITE_API_URL || 'http://localhost:3000/api/v1';
+            const res = await axios.post(`${apiBase}/auth/login`, { email, password });
             const { token, user } = res.data;
 
             localStorage.setItem('helaToken', token);

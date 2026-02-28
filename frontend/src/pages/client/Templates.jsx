@@ -93,39 +93,37 @@ const TemplateCard = ({ template }) => {
 const Templates = () => {
     const [templates, setTemplates] = useState([]);
     const [isSyncing, setIsSyncing] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState('');
 
+    const fetchTemplates = async () => {
+        try {
+            const apiBase = import.meta.env.VITE_API_URL || 'http://localhost:3000/api/v1';
+            const res = await axios.get(`${apiBase}/templates`);
+            setTemplates(res.data.data || []);
+            setError('');
+        } catch (err) {
+            console.error('Fetch templates error:', err);
+            setError('Failed to load templates.');
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     useEffect(() => {
-        // Stubbed data for UI verification while backend isn't running
-        setTemplates([
-            {
-                _id: '1', name: 'summer_sale_promo', language: 'en_US', status: 'APPROVED', category: 'MARKETING',
-                components: [
-                    { type: 'HEADER', format: 'IMAGE' },
-                    { type: 'BODY', text: 'Hey {{1}}! 🌞 Our huge summer sale is live. Get 50% off all premium items today only!' },
-                    { type: 'FOOTER', text: 'Reply STOP to unsubscribe' },
-                    { type: 'BUTTONS', buttons: [{ type: 'URL', text: 'Shop Now 🛍️' }, { type: 'QUICK_REPLY', text: 'Remind Me Later' }] }
-                ]
-            },
-            {
-                _id: '2', name: 'order_receipt_pdf', language: 'en_US', status: 'APPROVED', category: 'UTILITY',
-                components: [
-                    { type: 'HEADER', format: 'DOCUMENT' },
-                    { type: 'BODY', text: 'Hi {{1}}, thank you for your order. Your receipt is attached above.' }
-                ]
-            }
-        ]);
+        fetchTemplates();
     }, []);
 
     const handleSync = async () => {
         setIsSyncing(true);
         try {
-            // Uncomment when backend is live:
-            // const res = await axios.post('http://localhost:3000/api/v1/templates/sync');
-            // fetchTemplates();
-            setTimeout(() => setIsSyncing(false), 1500); // mock delay
+            const apiBase = import.meta.env.VITE_API_URL || 'http://localhost:3000/api/v1';
+            await axios.post(`${apiBase}/templates/sync`);
+            await fetchTemplates();
         } catch (err) {
-            setError('Failed to sync. Ensure Meta API credentials are valid.');
+            console.error('Sync templates error:', err);
+            setError(err.response?.data?.error || 'Failed to sync. Ensure Meta API credentials are valid.');
+        } finally {
             setIsSyncing(false);
         }
     };
@@ -145,11 +143,19 @@ const Templates = () => {
 
             {error && <div style={{ color: 'var(--danger)', marginBottom: '20px' }}>{error}</div>}
 
-            <div className="grid-3">
-                {templates.map(tmpl => (
-                    <TemplateCard key={tmpl._id} template={tmpl} />
-                ))}
-            </div>
+            {isLoading ? (
+                <div style={{ color: 'var(--text-secondary)', textAlign: 'center', padding: '40px' }}>Loading templates...</div>
+            ) : templates.length === 0 ? (
+                <div style={{ color: 'var(--text-secondary)', textAlign: 'center', padding: '40px', background: 'var(--glass-bg)', borderRadius: 'var(--radius-lg)' }}>
+                    No templates found. Click "Sync from Meta" to pull your approved templates.
+                </div>
+            ) : (
+                <div className="grid-3">
+                    {templates.map(tmpl => (
+                        <TemplateCard key={tmpl._id} template={tmpl} />
+                    ))}
+                </div>
+            )}
 
             {/* Adding the spin animation class dynamically */}
             <style>{`
