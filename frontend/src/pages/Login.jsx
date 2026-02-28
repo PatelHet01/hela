@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useAuth } from '../../context/AuthenticationContext';
+import { useAuth } from '../../context/AuthenticationContext.jsx';
 import { Lock, Mail } from 'lucide-react';
 
 const Login = () => {

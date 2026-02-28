@@ -19,6 +19,9 @@ async function startServer() {
 
         server.listen(PORT, () => {
             console.log(`🚀 HELA Server running on port ${PORT}`);
+            if (process.send) {
+                process.send('ready');
+            }
         });
     } catch (error) {
         console.error('❌ Failed to start server:', error.message);
