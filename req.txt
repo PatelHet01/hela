@@ -361,4 +361,4 @@ Stable internet hosting environment
 
 HELA will start as an internal WhatsApp automation engine and evolve into a scalable SaaS communication platform.
 
-make a auto push to github and what im thinking is first i'll make it for myself and then scale it as a product. so your first priority is to make it for me but keep in mind about scalling and making it big as Csaas product.
+make a auto push to github in a new repo 'hela whatsapp ' and what im thinking is first i'll make it for myself and then scale it as a product. so your first priority is to make it for me but keep in mind about scalling and making it big as Csaas product.
