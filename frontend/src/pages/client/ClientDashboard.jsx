@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { LayoutDashboard, MessageCircle, Users, Activity, LogOut, ChevronRight } from 'lucide-react';
-import { useAuth } from '../../context/authContext';
+import { useAuth } from '../../context/AuthenticationContext';
 import Templates from './Templates';
 
 const ClientHome = () => {

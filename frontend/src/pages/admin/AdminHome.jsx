@@ -1,5 +1,5 @@
 import React from 'react';
-import { useAuth } from '../../context/authContext';
+import { useAuth } from '../../context/AuthenticationContext';
 import { Users, MessageSquareText, Activity, LogOut } from 'lucide-react';
 
 const AdminHome = () => {
