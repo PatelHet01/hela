@@ -1,0 +1,364 @@
+📘 Software Requirements Specification (SRS)
+HELA – WhatsApp Marketing & Automation Platform
+1. Introduction
+1.1 Purpose
+
+This document defines the functional and non-functional requirements for HELA, a WhatsApp Business API-based marketing and automation platform.
+
+Initially, HELA will be used internally by the founder to manage marketing campaigns for multiple ventures. In future phases, it will evolve into a multi-tenant SaaS platform.
+
+1.2 Scope
+
+HELA will:
+
+Integrate with WhatsApp Cloud API (Meta)
+
+Allow bulk template-based marketing campaigns
+
+Manage contacts and segmentation
+
+Track delivery/read status
+
+Handle incoming messages via webhooks
+
+Provide analytics dashboard
+
+Support multi-workspace architecture (future SaaS scaling)
+
+HELA will NOT:
+
+Send unauthorized promotional messages
+
+Bypass WhatsApp template approval system
+
+Use unofficial WhatsApp APIs
+
+1.3 Definitions
+
+Workspace – Logical container representing a business account
+
+Campaign – Bulk broadcast of approved template message
+
+Template – Meta-approved message format
+
+Conversation Window – 24-hour interaction session billed by Meta
+
+Webhook – Endpoint to receive real-time WhatsApp events
+
+2. Overall Description
+2.1 Product Perspective
+
+HELA is a web-based platform consisting of:
+
+Backend API Server (Node.js)
+
+MongoDB Database
+
+Admin Dashboard (Web UI)
+
+Integration with WhatsApp Cloud API via Meta Graph API
+
+Hosting:
+
+AWS EC2 (Free Tier initially)
+
+MongoDB Atlas (Free Tier)
+
+2.2 Product Functions
+
+HELA shall provide:
+
+User authentication
+
+Workspace management
+
+WhatsApp number integration
+
+Contact management
+
+Campaign creation & execution
+
+Template management
+
+Webhook listener for inbound events
+
+Analytics dashboard
+
+Role-based access (future phase)
+
+2.3 User Classes
+1. Super Admin (Founder)
+
+Full control over platform
+
+Manage numbers, campaigns, analytics
+
+2. Workspace Admin (Future SaaS)
+
+Manage their own campaigns
+
+View analytics
+
+Manage contacts
+
+3. System Architecture
+3.1 High-Level Architecture
+
+User Dashboard → Backend API → Meta Cloud API
+Meta Webhook → Backend → Database → Dashboard
+
+3.2 Technology Stack
+
+Backend:
+
+Node.js (Express)
+
+Axios (API calls)
+
+Mongoose
+
+Database:
+
+MongoDB Atlas
+
+Hosting:
+
+AWS EC2
+
+External Integration:
+
+WhatsApp Cloud API via Meta Platforms
+
+4. Functional Requirements
+4.1 Authentication Module
+
+User login
+
+JWT-based authentication
+
+Secure password hashing (bcrypt)
+
+Session timeout
+
+4.2 Workspace Management
+
+System shall:
+
+Allow creation of workspace
+
+Assign WhatsApp numbers to workspace
+
+Separate data per workspace
+
+Database Model:
+
+Workspace {
+  _id,
+  name,
+  ownerId,
+  createdAt
+}
+4.3 WhatsApp Number Integration
+
+System shall:
+
+Store phone_number_id
+
+Store access token securely
+
+Verify webhook
+
+Allow test message sending
+
+4.4 Contact Management
+
+System shall:
+
+Import contacts via CSV
+
+Store:
+
+Name
+
+Phone number
+
+Tags
+
+Opt-in status
+
+Allow filtering by tags
+
+Validation:
+
+Only valid international format numbers accepted
+
+4.5 Template Management
+
+System shall:
+
+Fetch approved templates from Meta
+
+Store template metadata
+
+Categorize templates:
+
+Marketing
+
+Utility
+
+Authentication
+
+Templates must be pre-approved by Meta.
+
+4.6 Campaign Management
+
+System shall allow:
+
+Selecting template
+
+Selecting contacts or tag group
+
+Scheduling campaign (Phase 2)
+
+Sending instantly
+
+Tracking status
+
+Campaign statuses:
+
+Draft
+
+Scheduled
+
+Running
+
+Completed
+
+Failed
+
+4.7 Message Logs
+
+System shall store:
+
+Message ID
+
+Contact ID
+
+Status (sent, delivered, read, failed)
+
+Timestamp
+
+Error codes
+
+4.8 Webhook Module
+
+System shall:
+
+Handle verification GET request
+
+Handle POST webhook events
+
+Update message status
+
+Store incoming messages
+
+Must respond within 5 seconds.
+
+4.9 Analytics Dashboard
+
+Dashboard shall display:
+
+Total messages sent
+
+Delivery rate
+
+Read rate
+
+Failed messages
+
+Campaign performance
+
+5. Non-Functional Requirements
+5.1 Performance
+
+Webhook response time < 3 seconds
+
+Campaign sending should support batch processing
+
+System should handle minimum 1000 messages/day initially
+
+5.2 Security
+
+All secrets in environment variables
+
+HTTPS required
+
+Role-based access control
+
+Secure token storage
+
+Input validation & sanitization
+
+5.3 Scalability
+
+System architecture shall:
+
+Support multi-workspace
+
+Allow addition of Redis queue
+
+Support horizontal scaling in future
+
+5.4 Reliability
+
+Use PM2 for process management
+
+Automatic restart on crash
+
+Logging mechanism
+
+5.5 Compliance
+
+Must comply with WhatsApp Business Policy
+
+Only opt-in contacts allowed
+
+Template-based outbound marketing
+
+6. Future Scope (SaaS Version)
+
+Multi-tenant SaaS dashboard
+
+Subscription billing
+
+Razorpay integration
+
+Chatbot flow builder
+
+AI-based auto-replies
+
+CRM integration
+
+White-label solution
+
+7. Constraints
+
+Dependent on WhatsApp API approval
+
+Dependent on Meta rate limits
+
+Dependent on conversation-based pricing model
+
+8. Assumptions
+
+Founder has verified Meta Business account
+
+At least one dedicated WhatsApp number
+
+Stable internet hosting environment
+
+🔥 Final Positioning Statement
+
+HELA will start as an internal WhatsApp automation engine and evolve into a scalable SaaS communication platform.
+
+make a auto push to github and what im thinking is first i'll make it for myself and then scale it as a product. so your first priority is to make it for me but keep in mind about scalling and making it big as Csaas product.
